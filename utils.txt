@@ -4,7 +4,6 @@ git commit -m ".gitignore is now working"
 git push
 
 
-
 python3 -m venv .venv
 source .venv/bin/activate
 
@@ -12,34 +11,11 @@ source .venv/bin/activate
 python -m pip install -r requirements.txt
 
 
-docker pull puckel/docker-airflow
-docker run -d -p 8080:8080 -v /Users/alexei/docs/MIAGE/S4/D605/darties/airflow:/usr/local/airflow puckel/docker-airflow webserver
+python -m spacy download en_core_web_md
+python -m spacy link en_core_web_md en
+rasa train
 
-#inside docker container, run :
-pip install xlrd>=1.0.0
-pip install openpyxl
+rasa run actions --port 5056
 
-docker build -t webserver .
-docker run -d webserver
+rasa shell
 
-
-
-curl -X "DELETE" http://127.0.0.1:8080/api/experimental/dags/test_dag
-
-
-AIRFLOW CONNECTIONS :
-
-    AWS :
-        Conn Id : aws_credentials
-        Conn Type : Amazon Web Services
-        Login : Access key ID from the IAM User credentials
-        Password : Secret access key from the IAM User credentials
-
-    REDSHIFT :
-        Conn Id : redshift
-        Conn Type : Postgres
-        Host : endpoint of your Redshift cluster, excluding the port at the end
-        Schema :  dev
-        Login : awsuser
-        Password :  password you created when launching your Redshift cluster.
-        Port : 5439
